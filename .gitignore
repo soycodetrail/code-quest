@@ -1,7 +1,6 @@
 # Godot
 .godot/
 *.tmp
-export_presets.cfg
 *.import
 
 # OS
@@ -23,3 +22,12 @@ obj/
 
 # 测试产物
 reports/
+
+# Android build artifacts
+/build/
+/android/build/build/
+/android/build/.gradle/
+/android/build/local.properties
+/android/build/assets/*.pck
+# Godot libs are extracted from android_source.zip on first build
+/android/build/libs/
