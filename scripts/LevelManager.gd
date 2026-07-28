@@ -117,8 +117,6 @@ func load_level(level_id: int) -> void:
 		push_error("无效的关卡 ID: " + str(level_id))
 		return
 	current_level = level_id
-	# TODO: 切换到游戏场景
-	print("加载关卡 " + str(level_id) + ": " + levels[level_id].title)
 
 ## 关卡完成
 func complete_level(level_id: int) -> void:

@@ -15,10 +15,10 @@ func _ready() -> void:
 func _on_start() -> void:
 	# 从第一关开始
 	LevelManager.load_level(0)
+	get_tree().change_scene_to_file("res://scenes/GameScene.tscn")
 
 func _on_level_select() -> void:
-	# TODO: 关卡选择界面
-	print("关卡选择（待实现）")
+	get_tree().change_scene_to_file("res://scenes/LevelSelect.tscn")
 
 func _on_exit() -> void:
 	get_tree().quit()

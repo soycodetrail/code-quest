@@ -1,0 +1,196 @@
+[gd_scene load_steps=3 format=3 uid="uid://game_scene_001"]
+
+[ext_resource type="Script" path="res://scripts/GameScene.gd" id="1"]
+
+[sub_resource type="Theme" id="theme_1"]
+default_font_size = 16
+
+[node name="GameScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("theme_1")
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.07, 0.1, 1)
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_constants/separation = 12
+
+[node name="BackBtn" type="Button" parent="TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 36)
+text = "← 返回"
+
+[node name="ChapterLabel" type="Label" parent="TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 36)
+theme_override_colors/font_color = Color(0.4, 0.6, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "章节"
+vertical_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "关卡"
+vertical_alignment = 1
+
+[node name="KnowledgeLabel" type="Label" parent="TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 36)
+theme_override_colors/font_color = Color(0.6, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 13
+text = "知识点"
+vertical_alignment = 1
+horizontal_alignment = 2
+
+[node name="MainSplit" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 8.0
+offset_top = 56.0
+offset_right = -8.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 560
+
+[node name="LeftPanel" type="VBoxContainer" parent="MainSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="PromptLabel" type="Label" parent="MainSplit/LeftPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+text = "任务描述"
+
+[node name="PromptScroll" type="ScrollContainer" parent="MainSplit/LeftPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+size_flags_vertical = 3
+
+[node name="PromptText" type="RichTextLabel" parent="MainSplit/LeftPanel/PromptScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+theme_override_font_sizes/normal_font_size = 14
+theme_override_colors/default_color = Color(0.85, 0.85, 0.85, 1)
+text = "任务"
+
+[node name="CodeLabel" type="Label" parent="MainSplit/LeftPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.7, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "代码编辑器"
+
+[node name="CodeEdit" type="CodeEdit" parent="MainSplit/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 200)
+theme_override_colors/background_color = Color(0.08, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.9, 0.92, 0.95, 1)
+theme_override_font_sizes/font_size = 14
+gutters_draw_line_numbers = true
+
+[node name="HintBtn" type="Button" parent="MainSplit/LeftPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 32)
+text = "显示提示"
+
+[node name="HintLabel" type="Label" parent="MainSplit/LeftPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.7, 0.3, 1)
+theme_override_font_sizes/font_size = 13
+text = "提示"
+autowrap_mode = 3
+
+[node name="RightPanel" type="VBoxContainer" parent="MainSplit"]
+layout_mode = 2
+custom_minimum_size = Vector2(400, 0)
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="MainSplit/RightPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+text = ""
+horizontal_alignment = 1
+
+[node name="CharacterArea" type="ColorRect" parent="MainSplit/RightPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 160)
+color = Color(0.05, 0.08, 0.1, 1)
+
+[node name="ResultLabel" type="Label" parent="MainSplit/RightPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+text = "输出结果"
+
+[node name="ResultScroll" type="ScrollContainer" parent="MainSplit/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ResultText" type="RichTextLabel" parent="MainSplit/RightPanel/ResultScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+theme_override_font_sizes/normal_font_size = 14
+theme_override_colors/default_color = Color(0.9, 0.92, 0.95, 1)
+text = "输出"
+
+[node name="BottomBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -48.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ResetBtn" type="Button" parent="BottomBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 40)
+text = "重置代码"
+
+[node name="RunBtn" type="Button" parent="BottomBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 40)
+text = "运行代码"
+
+[node name="NextBtn" type="Button" parent="BottomBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 40)
+text = "下一关 →"
