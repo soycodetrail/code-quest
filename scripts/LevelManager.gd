@@ -159,5 +159,8 @@ func _load_progress() -> void:
 		file.close()
 		var data = JSON.parse_string(text)
 		if data:
-			completed_levels = data.get("completed_levels", [])
+			var loaded = data.get("completed_levels", [])
+			completed_levels.clear()
+			for v in loaded:
+				completed_levels.append(int(v))
 			current_level = data.get("current_level", 0)

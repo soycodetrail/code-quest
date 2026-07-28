@@ -164,16 +164,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 160)
 color = Color(0.05, 0.08, 0.1, 1)
 
-[node name="CharacterSprite" type="Label" parent="MainSplit/RightPanel/CharacterArea"]
-layout_mode = 0
+[node name="CharacterSprite" type="Node2D" parent="MainSplit/RightPanel/CharacterArea"]
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 48.0
 offset_bottom = 48.0
-theme_override_font_sizes/font_size = 40
-text = "🧙"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="EffectLabel" type="Label" parent="MainSplit/RightPanel/CharacterArea"]
 layout_mode = 0
