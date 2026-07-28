@@ -1,0 +1,22 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Code Quest"
+config/description="Python 编程闯关游戏"
+run/main_scene="res://scenes/MainMenu.tscn"
+config/features=PackedStringArray("4.7", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+LevelManager="*res://scripts/LevelManager.gd"
+PythonRunner="*res://scripts/PythonRunner.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
