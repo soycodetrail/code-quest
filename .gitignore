@@ -20,3 +20,6 @@ assets
 screenshots
 bin/
 obj/
+
+# 测试产物
+reports/

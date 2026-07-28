@@ -812,7 +812,18 @@ class Interpreter:
 		if op == "/":  return float(l3) / float(r)
 		if op == "//": return _floor_div(l3, r)
 		if op == "%":  return _py_mod(l3, r)
-		if op == "**": return pow(l3, r)
+		if op == "**":
+			# Python 整数幂返回 int（如 2**10 == 1024），浮点幂才返回 float
+			if l3 is int and r is int:
+				var result: int = 1
+				var base_v: int = int(l3)
+				var exp_v: int = int(r)
+				if exp_v < 0:
+					return pow(l3, r)  # 负指数退回 float
+				for i in range(exp_v):
+					result *= base_v
+				return result
+			return pow(l3, r)
 		if op == "==": return l3 == r
 		if op == "!=": return l3 != r
 		if op == "<":  return l3 < r
