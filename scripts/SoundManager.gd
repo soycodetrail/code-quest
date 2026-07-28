@@ -45,7 +45,10 @@ func play_error() -> void:
 	], true)
 
 func toggle_mute() -> bool:
-	_muted = not _muted
+	return set_muted(not _muted)
+
+func set_muted(v: bool) -> bool:
+	_muted = v
 	var bus_idx := AudioServer.get_bus_index("Master")
 	if bus_idx >= 0:
 		AudioServer.set_bus_mute(bus_idx, _muted)
