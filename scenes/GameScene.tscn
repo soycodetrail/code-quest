@@ -65,6 +65,23 @@ text = "知识点"
 vertical_alignment = 1
 horizontal_alignment = 2
 
+[node name="ProgressBar" type="ProgressBar" parent="TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 20)
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 12
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="ProgressLabel" type="Label" parent="TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 36)
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 13
+text = "0/7"
+vertical_alignment = 1
+
 [node name="MainSplit" type="HSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -147,6 +164,28 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 160)
 color = Color(0.05, 0.08, 0.1, 1)
 
+[node name="CharacterSprite" type="Label" parent="MainSplit/RightPanel/CharacterArea"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 48.0
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 40
+text = "🧙"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EffectLabel" type="Label" parent="MainSplit/RightPanel/CharacterArea"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 60.0
+offset_right = 120.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = ""
+horizontal_alignment = 1
+
 [node name="ResultLabel" type="Label" parent="MainSplit/RightPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.6, 1)
@@ -194,3 +233,41 @@ text = "运行代码"
 layout_mode = 2
 custom_minimum_size = Vector2(120, 40)
 text = "下一关 →"
+
+[node name="CelebrationOverlay" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DimRect" type="ColorRect" parent="CelebrationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+mouse_filter = 2
+
+[node name="CelebrationLabel" type="Label" parent="CelebrationOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -60.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 48
+text = "🎉 通关！🎉"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -5,20 +5,21 @@ extends Node
 
 signal execution_finished(output: String, success: bool)
 
-var _process: ProcessNode = null
-
 ## 执行 Python 代码
 func execute_code(code: String) -> void:
-	# 写入临时文件
-	var tmp_path = OS.get_cache_path() + "/code_quest_player.py"
+	# 写入临时文件（user:// 目录可读写）
+	var tmp_path = "user://code_quest_player.py"
 	var file = FileAccess.open(tmp_path, FileAccess.WRITE)
 	if file:
 		file.store_string(code)
 		file.close()
 	
+	# 转成系统绝对路径供 python3 进程读取
+	var abs_path = ProjectSettings.globalize_path(tmp_path)
+	
 	# 调用系统 Python 执行
 	var output = []
-	var exit_code = OS.execute("python3", [tmp_path], output, true)
+	var exit_code = OS.execute("python3", [abs_path], output, true)
 	
 	var result = "\n".join(output)
 	var success = (exit_code == 0)
