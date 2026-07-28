@@ -13,6 +13,7 @@ config/icon="res://icon.svg"
 
 LevelManager="*res://scripts/LevelManager.gd"
 PythonRunner="*res://scripts/PythonRunner.gd"
+SoundManager="*res://scripts/SoundManager.gd"
 
 [display]
 

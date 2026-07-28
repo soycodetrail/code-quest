@@ -133,6 +133,13 @@ func get_total_levels() -> int:
 func get_completed_count() -> int:
 	return completed_levels.size()
 
+## 重置进度（清空通关记录，current_level 回到第 0 关）
+func reset_progress() -> void:
+	completed_levels.clear()
+	current_level = 0
+	_save_progress()
+	print("进度已重置")
+
 ## 保存进度
 func _save_progress() -> void:
 	var save_data = {

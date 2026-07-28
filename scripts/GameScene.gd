@@ -122,11 +122,13 @@ func _on_run() -> void:
 	if syntax_err != "":
 		result_text.text = "[color=red]语法提醒：" + syntax_err + "[/color]"
 		_shake_character()
+		SoundManager.play_error()
 		return
-	
+
 	run_btn.disabled = true
 	run_btn.text = "运行中..."
 	result_text.text = "[color=gray]正在执行...[/color]"
+	SoundManager.play_step()
 	
 	# 角色等待动画
 	character_effect.text = "..."
@@ -145,6 +147,7 @@ func _on_execution_finished(output: String, success: bool) -> void:
 		character_area.color = Color(0.3, 0.1, 0.1, 1)
 		character_effect.text = "😵"
 		_shake_character()
+		SoundManager.play_error()
 		return
 	
 	if output.strip_edges().is_empty():
@@ -175,6 +178,7 @@ func _pass_level() -> void:
 	
 	# 庆祝粒子
 	_spawn_celebration()
+	SoundManager.play_success()
 	
 	# 输出区
 	result_text.append_text("\n\n[color=green][b]========== 通关！==========[/b][/color]")

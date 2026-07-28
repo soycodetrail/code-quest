@@ -11,6 +11,9 @@ func _ready() -> void:
 	start_btn.pressed.connect(_on_start)
 	level_select_btn.pressed.connect(_on_level_select)
 	exit_btn.pressed.connect(_on_exit)
+	# 全局按钮 hover/press 提示音
+	for b in [start_btn, level_select_btn, exit_btn]:
+		b.pressed.connect(SoundManager.play_click)
 
 func _on_start() -> void:
 	# 从第一关开始
