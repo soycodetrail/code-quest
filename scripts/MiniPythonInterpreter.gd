@@ -120,7 +120,7 @@ func _lex_line(line: String, line_no: int) -> Dictionary:
 			tokens.append(Token.new("OP", two, line_no))
 			i += 2
 			continue
-		if ch in "+-*/%=<>()[],:.":
+		if ch in "+-*/%=<>()[],:.{}":
 			tokens.append(Token.new("OP", ch, line_no))
 			i += 1
 			continue
@@ -409,7 +409,21 @@ class Parser:
 		if left == null:
 			return null
 		while check("OP", "==") or check("OP", "!=") or check("OP", "<") \
-				or check("OP", "<=") or check("OP", ">") or check("OP", ">="):
+				or check("OP", "<=") or check("OP", ">") or check("OP", ">=") \
+				or check("KEYWORD", "in") or check("KEYWORD", "not"):
+			# not in 处理
+			if check("KEYWORD", "not"):
+				# 需要 not in 组合
+				var not_op: Token = peek()
+				advance()
+				if not _match("KEYWORD", "in"):
+					_error("not 后期望 in")
+					return null
+				var right_ni: Variant = parse_additive()
+				if right_ni == null:
+					return null
+				left = {"_t": "binop", "op": "not_in", "left": left, "right": right_ni, "line": not_op.line}
+				continue
 			var op: Token = advance()
 			var right: Variant = parse_additive()
 			if right == null:
@@ -478,6 +492,27 @@ class Parser:
 				e = _parse_index(e)
 				if e == null:
 					return null
+			elif check("OP", "."):
+				# 方法调用 obj.method(args)
+				advance()  # 消费 .
+				if not check("NAME"):
+					_error(". 后需要方法名")
+					return null
+				var method_name: String = advance().value
+				if not _match("OP", "("):
+					_error("方法调用需要 ()")
+					return null
+				var args: Array = []
+				while not check("OP", ")"):
+					var a: Variant = parse_expr()
+					if a == null:
+						return null
+					args.append(a)
+					if not _match("OP", ","):
+						break
+				if expect("OP", ")") == null:
+					return null
+				e = {"_t": "method", "obj": e, "method": method_name, "args": args, "line": peek().line}
 			else:
 				break
 		return e
@@ -557,6 +592,24 @@ class Parser:
 				if expect("OP", "]") == null:
 					return null
 				return {"_t": "list", "elems": elems, "line": t.line}
+			if t.value == "{":
+				advance()
+				var pairs: Array = []
+				while not check("OP", "}"):
+					var k: Variant = parse_expr()
+					if k == null:
+						return null
+					if expect("OP", ":") == null:
+						return null
+					var v: Variant = parse_expr()
+					if v == null:
+						return null
+					pairs.append([k, v])
+					if not _match("OP", ","):
+						break
+				if expect("OP", "}") == null:
+					return null
+				return {"_t": "dict", "pairs": pairs, "line": t.line}
 		_error("非预期的 token: %s '%s'" % [t.type, str(t.value)])
 		return null
 
@@ -658,6 +711,8 @@ class Interpreter:
 				obj[i] = v
 			else:
 				_set_error("列表索引越界")
+		elif obj is Dictionary:
+			obj[idx] = v
 		else:
 			_set_error("不支持的对象索引赋值")
 
@@ -715,6 +770,10 @@ class Interpreter:
 		elif iter_val is String:
 			for ch in iter_val:
 				seq.append(ch)
+		elif iter_val is Dictionary:
+			# Python 默认迭代 dict 的 keys
+			for k in iter_val:
+				seq.append(k)
 		else:
 			_set_error("for 不能迭代该类型")
 			return
@@ -739,12 +798,119 @@ class Interpreter:
 			"lit":     return node["value"]
 			"name":    return _lookup(node["value"])
 			"list":    return _eval_list(node["elems"])
+			"dict":    return _eval_dict(node)
 			"binop":   return _eval_binop(node)
 			"unaryop": return _eval_unaryop(node)
 			"call":    return _eval_call(node)
 			"index":   return _eval_index(node)
 			"slice":   return _eval_slice(node)
+			"method":  return _eval_method(node)
 		_set_error("未知节点类型 %s" % node["_t"])
+		return null
+
+	func _eval_dict(node: Dictionary) -> Dictionary:
+		var d: Dictionary = {}
+		for kv in node["pairs"]:
+			var k: Variant = _eval(kv[0])
+			if error != "":
+				return {}
+			var v: Variant = _eval(kv[1])
+			if error != "":
+				return {}
+			d[k] = v
+		return d
+
+	func _eval_method(node: Dictionary) -> Variant:
+		var obj: Variant = _eval(node["obj"])
+		if error != "":
+			return null
+		var method: String = node["method"]
+		# 先求参数
+		var args: Array = []
+		for a in node["args"]:
+			args.append(_eval(a))
+			if error != "":
+				return null
+		if obj is String:
+			return _string_method(obj, method, args)
+		if obj is Array:
+			return _list_method(obj, method, args)
+		if obj is Dictionary:
+			return _dict_method(obj, method, args)
+		_set_error("类型 %s 不支持方法调用" % str(typeof(obj)))
+		return null
+
+	func _string_method(s: String, method: String, args: Array) -> Variant:
+		match method:
+			"upper":  return s.to_upper()
+			"lower":  return s.to_lower()
+			"strip", "trim": return s.strip_edges()
+			"lstrip": return s.strip_edges(true, false)
+			"rstrip": return s.strip_edges(false, true)
+			"replace": return s.replace(args[0], args[1])
+			"split":
+				var raw = s.split(args[0]) if args.size() >= 1 else s.split(" ")
+				# Godot split 返回 PackedStringArray，转 Array 保持类型一致
+				var arr: Array = []
+				for x in raw:
+					arr.append(x)
+				return arr
+			"startswith": return s.begins_with(args[0])
+			"endswith":   return s.ends_with(args[0])
+			"find":   return s.find(args[0])
+			"count":  return s.count(args[0])
+			"join":   return s.join(args[0] if args.size() >= 1 else [])
+			"isdigit": return s.is_valid_int()
+			"index":  var i = s.find(args[0]); if i < 0: _set_error("子串未找到"); return -1; return i
+		_set_error("String 无此方法: %s" % method)
+		return null
+
+	func _list_method(arr: Array, method: String, args: Array) -> Variant:
+		match method:
+			"append": arr.append(args[0]); return null
+			"pop":
+				if args.size() == 0:
+					if arr.is_empty():
+						_set_error("pop 空列表")
+						return null
+					return arr.pop_back()
+				else:
+					return arr.pop_at(int(args[0]))
+			"remove": arr.erase(args[0]); return null
+			"sort": arr.sort(); return null
+			"reverse": arr.reverse(); return null
+			"count": return arr.count(args[0])
+			"index": var idx = arr.find(args[0]); if idx < 0: _set_error("元素未找到"); return idx
+			"extend": arr.append_array(args[0]); return null
+			"insert": arr.insert(int(args[0]), args[1]); return null
+			"copy": return arr.duplicate()
+		_set_error("List 无此方法: %s" % method)
+		return null
+
+	func _dict_method(d: Dictionary, method: String, args: Array) -> Variant:
+		match method:
+			"keys":
+				var arr: Array = []
+				for k in d.keys(): arr.append(k)
+				return arr
+			"values":
+				var arr2: Array = []
+				for v in d.values(): arr2.append(v)
+				return arr2
+			"get":
+				if args.size() == 1:
+					return d.get(args[0], null)
+				return d.get(args[0], args[1])
+			"pop":
+				if not d.has(args[0]):
+					if args.size() >= 2: return args[1]
+					_set_error("dict.pop 键不存在")
+					return null
+				var v = d[args[0]]
+				d.erase(args[0])
+				return v
+			"items":  return d.keys()  # 简化：不支持 d.items() 元组列表
+		_set_error("Dict 无此方法: %s" % method)
 		return null
 
 	func _eval_list(elems: Array) -> Array:
@@ -765,6 +931,8 @@ class Interpreter:
 		if v is String:
 			return v.length() > 0
 		if v is Array:
+			return v.size() > 0
+		if v is Dictionary:
 			return v.size() > 0
 		return true
 
@@ -830,8 +998,22 @@ class Interpreter:
 		if op == "<=": return l3 <= r
 		if op == ">":  return l3 > r
 		if op == ">=": return l3 >= r
+		if op == "in":
+			return _py_in(l3, r)
+		if op == "not_in":
+			return not _py_in(l3, r)
 		_set_error("未知运算符 %s" % op)
 		return null
+
+	func _py_in(needle: Variant, hay: Variant) -> bool:
+		if hay is Array:
+			return hay.has(needle)
+		if hay is Dictionary:
+			return hay.has(needle)
+		if hay is String:
+			return (hay as String).find(str(needle)) >= 0
+		_set_error("in 右操作数类型不支持")
+		return false
 
 	func _floor_div(l: Variant, r: Variant) -> Variant:
 		if l is int and r is int:
@@ -932,6 +1114,7 @@ class Interpreter:
 			if error != "": return 0
 			if v is String: return v.length()
 			if v is Array:  return v.size()
+			if v is Dictionary: return v.size()
 			_set_error("len: 类型错误")
 			return 0
 		if bi == "BUILTIN_RANGE":
@@ -1013,6 +1196,13 @@ class Interpreter:
 				else:
 					parts.append(_py_str(x))
 			return "[" + ", ".join(parts) + "]"
+		if v is Dictionary:
+			var parts2: Array = []
+			for k in v:
+				var ks: String = ("'" + k + "'") if k is String else _py_str(k)
+				var vs: String = ("'" + v[k] + "'") if v[k] is String else _py_str(v[k])
+				parts2.append(ks + ": " + vs)
+			return "{" + ", ".join(parts2) + "}"
 		return str(v)
 
 	func _builtin_range(arg_nodes: Array) -> Array:
@@ -1066,6 +1256,12 @@ class Interpreter:
 				_set_error("字符串索引越界")
 				return null
 			return s[i2]
+		if obj is Dictionary:
+			var d: Dictionary = obj
+			if not d.has(idx):
+				_set_error("KeyError: '%s'" % str(idx))
+				return null
+			return d[idx]
 		_set_error("该对象不支持索引")
 		return null
 

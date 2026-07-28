@@ -94,6 +94,54 @@ func _init_levels() -> void:
 		"提示：def attack(power):",
 		"res://scenes/levels/Level6.tscn")
 
+	# 第五章：古堡谜题（字典）
+	_add_level(7, "第五章 古堡谜题", "怪物图鉴",
+		"用字典记录怪物的属性。",
+		"字典 dict、键值对",
+		"创建字典 monster = {\"name\": \"哥布林\", \"hp\": 50}\nprint 出它的名字和血量。\n格式：print(monster[\"name\"], monster[\"hp\"])",
+		'# 创建字典 monster\n# print(monster["name"], monster["hp"])\n\n',
+		"哥布林 50",
+		'提示：字典用 {}，取值用 d["key"]',
+		"res://scenes/levels/Level7.tscn")
+
+	_add_level(8, "第五章 古堡谜题", "属性查询",
+		"用 get 方法安全查询属性，避免 KeyError。",
+		"dict.get() 方法",
+		"hero = {\"hp\": 100, \"mp\": 30}\n用 hero.get(\"hp\") 查血量，用 hero.get(\"atk\", 5) 查攻击（默认 5）。\nprint 出这两个值。",
+		'# 用 hero.get() 查询\nhero = {"hp": 100, "mp": 30}\n\n',
+		"100 5",
+		"提示：dict.get(key, default) 不存在时返回 default",
+		"res://scenes/levels/Level8.tscn")
+
+	# 第六章：龙之挑战（字符串）
+	_add_level(9, "第六章 龙之挑战", "标准化咒语",
+		"龙的咒语必须大写才能生效。",
+		"字符串方法 upper/lower",
+		"spell = \"fireball\"\n用 .upper() 把它转大写并 print。",
+		'# 把咒语转大写\nspell = "fireball"\n\n',
+		"FIREBALL",
+		'提示：spell.upper()',
+		"res://scenes/levels/Level9.tscn")
+
+	_add_level(10, "第六章 龙之挑战", "咒语拆分",
+		"把完整咒语按空格拆分，逐行念出。",
+		"字符串 split、列表遍历",
+		"spell = \"flame wind ice\"\n用 .split(\" \") 拆成列表，for 遍历每行 print。",
+		'# 拆分咒语并逐行输出\nspell = "flame wind ice"\n\n',
+		"flame\nwind\nice",
+		'提示：for word in spell.split(" "):',
+		"res://scenes/levels/Level10.tscn")
+
+	# 第七章：终极挑战（综合算法）
+	_add_level(11, "第七章 终极挑战", "词频统计",
+		"统计一段文字里每个单词出现的次数——真正的算法题！",
+		"综合：split + for + dict + if + in",
+		"text = \"the cat sat on the mat\"\n用 split 拆词，遍历用字典 counts 记录每个单词次数。\n最后 print(counts[\"the\"])。",
+		'# 统计词频\ntext = "the cat sat on the mat"\n\n',
+		"2",
+		'提示：if word in counts: counts[word] += 1 else: counts[word] = 1',
+		"res://scenes/levels/Level11.tscn")
+
 ## 添加关卡
 func _add_level(id: int, chapter: String, title: String, description: String, 
 		python_knowledge: String, prompt: String, starter_code: String,

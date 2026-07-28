@@ -4,7 +4,8 @@ extends GdUnitTestSuite
 ## LevelManager 数据与状态测试
 
 func test_has_seven_levels() -> void:
-	assert_int(LevelManager.levels.size()).is_equal(7)
+	# 7 关基础 + 5 关 P2-4 新增 = 12 关
+	assert_int(LevelManager.levels.size()).is_equal(12)
 
 func test_level_ids_sequential() -> void:
 	for i in range(LevelManager.levels.size()):
