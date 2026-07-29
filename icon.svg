@@ -1,1 +1,67 @@
-<svg height="128" width="128" xmlns="http://www.w3.org/2000/svg"><rect width="128" height="128" fill="#478cbf" rx="16"/><text x="64" y="84" font-size="64" text-anchor="middle" fill="white" font-family="sans-serif" font-weight="bold">&gt;_</text></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#3A4FBF"/>
+      <stop offset="55%" stop-color="#1E2A6E"/>
+      <stop offset="100%" stop-color="#0F1438"/>
+    </radialGradient>
+    <linearGradient id="hat" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7B8FFF"/>
+      <stop offset="100%" stop-color="#3D52E0"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FFE8A8"/>
+      <stop offset="50%" stop-color="#FFB347"/>
+      <stop offset="100%" stop-color="#E07A1F"/>
+    </radialGradient>
+    <clipPath id="roundCorners">
+      <rect x="0" y="0" width="256" height="256" rx="56" ry="56"/>
+    </clipPath>
+  </defs>
+
+  <rect x="0" y="0" width="256" height="256" rx="56" ry="56" fill="url(#bg)"/>
+
+  <g clip-path="url(#roundCorners)">
+    <circle cx="40" cy="50" r="1.5" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="210" cy="70" r="2" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="200" cy="180" r="1.5" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="50" cy="200" r="1.5" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="220" cy="130" r="1" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="35" cy="120" r="1" fill="#FFFFFF" opacity="0.6"/>
+
+    <polygon points="100,150 156,150 168,228 88,228" fill="#2D3AA8"/>
+    <polygon points="100,150 156,150 168,228 88,228" fill="#3D52E0" opacity="0.4"/>
+
+    <circle cx="128" cy="170" r="3" fill="#FFB347"/>
+    <circle cx="128" cy="190" r="3" fill="#FFB347"/>
+    <circle cx="128" cy="210" r="3" fill="#FFB347"/>
+
+    <circle cx="128" cy="128" r="30" fill="#FFD8B5"/>
+    <circle cx="112" cy="138" r="5" fill="#F5A89A" opacity="0.6"/>
+    <circle cx="144" cy="138" r="5" fill="#F5A89A" opacity="0.6"/>
+
+    <rect x="114" y="120" width="7" height="9" rx="2" fill="#1A1A1A"/>
+    <rect x="135" y="120" width="7" height="9" rx="2" fill="#1A1A1A"/>
+    <circle cx="118" cy="123" r="1.5" fill="#FFFFFF"/>
+    <circle cx="139" cy="123" r="1.5" fill="#FFFFFF"/>
+
+    <path d="M 118 142 Q 128 150 138 142" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <ellipse cx="128" cy="100" rx="42" ry="8" fill="#1F2A8A"/>
+    <polygon points="86,100 170,100 128,28" fill="url(#hat)"/>
+    <polygon points="128,28 128,100 170,100" fill="#FFFFFF" opacity="0.12"/>
+
+    <polygon points="128,18 131,28 141,28 133,34 136,44 128,38 120,44 123,34 115,28 125,28" fill="#FFE8A8"/>
+
+    <line x1="180" y1="80" x2="195" y2="200" stroke="#8B6F3F" stroke-width="6" stroke-linecap="round"/>
+    <line x1="180" y1="80" x2="195" y2="200" stroke="#A88752" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+    <circle cx="180" cy="80" r="26" fill="url(#orb)"/>
+    <path d="M 173 73 L 167 80 L 173 87" stroke="#1A1A1A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 187 73 L 193 80 L 187 87" stroke="#1A1A1A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="180" y1="70" x2="178" y2="90" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <rect x="1" y="1" width="254" height="254" rx="55" ry="55" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.15"/>
+</svg>
