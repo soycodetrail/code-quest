@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+script = ExtResource("1")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -68,7 +69,6 @@ offset_bottom = 160.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 16
-mouse_filter = 1
 
 [node name="StartBtn" type="Button" parent="VBox"]
 layout_mode = 2

@@ -14,6 +14,7 @@ func _ready() -> void:
 	# 最先创建调试标签，确保任何后续错误都能在屏幕上看到
 	_create_debug_label()
 	_log("MENU READY start")
+	push_warning("[CodeQuest] MainMenu _ready executed")
 	
 	# 查找按钮（容错）
 	var vbox = get_node_or_null("VBox")
@@ -45,10 +46,22 @@ func _ready() -> void:
 	for b in [start_btn, level_select_btn, settings_btn, exit_btn]:
 		if b:
 			_log("%s rect=%s filter=%d" % [b.name, str(b.get_global_rect()), b.mouse_filter])
-	
+
+	# 强制 VBox 重排（修复 Android 上布局未完成导致按钮重叠）
+	call_deferred("_force_layout")
+
 	set_process_input(true)
 	set_process_unhandled_input(true)
 	_log("MENU READY done")
+
+func _force_layout() -> void:
+	var vbox = get_node_or_null("VBox")
+	if vbox:
+		vbox.queue_sort()
+	# 重新打印布局后的位置
+	for b in [start_btn, level_select_btn, settings_btn, exit_btn]:
+		if b:
+			_log("%s final rect=%s" % [b.name, str(b.get_global_rect())])
 
 func _create_debug_label() -> void:
 	_debug_label = Label.new()
@@ -69,6 +82,11 @@ func _log(msg: String) -> void:
 	print("[MainMenu] " + msg)
 	if _debug_label:
 		_debug_label.text = msg
+	# 同时写文件，方便 Android 调试
+	var f = FileAccess.open("user://debug.log", FileAccess.WRITE)
+	if f:
+		f.store_string(msg + "\n")
+		f.close()
 
 func _input(event: InputEvent) -> void:
 	_handle_touch(event)
